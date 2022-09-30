@@ -1,0 +1,9 @@
+{
+	"plugins": [
+		"add-js-css",
+		"edit-link",
+		"-lunr",
+		"-search",
+		"search-plus"
+	]
+}
