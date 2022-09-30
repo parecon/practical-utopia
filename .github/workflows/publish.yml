@@ -1,0 +1,38 @@
+name: Publish to GitHub Pages
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        repository: parecon/practical-utopia-src
+        token: ${{ secrets.PAT }}
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - name: Install Honkit
+      run: npm i honkit
+    - name: Generate Site
+      env:
+        GIT_CREDENTIALS: https://parecon:${{ secrets.PAT }}@github.com
+      run: npx honkit build . build/site
+    - name: Publish to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.PAT }}
+        publish_dir: build/site
